@@ -1,0 +1,191 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Lune</title>
+  <meta name="description" content="Suivi de cycle menstruel privé, sur ton téléphone.">
+  <meta name="theme-color" content="#FBF5F2" media="(prefers-color-scheme: light)">
+  <meta name="theme-color" content="#1C1418" media="(prefers-color-scheme: dark)">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
+  <meta name="apple-mobile-web-app-title" content="Lune">
+  <link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
+  <link rel="icon" href="icons/icon-192.png">
+  <link rel="manifest" href="manifest.webmanifest">
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+  <main id="app">
+    <!-- ACCUEIL -->
+    <section class="view" id="view-home" data-view="home">
+      <header class="top">
+        <p class="eyebrow" id="home-date"></p>
+        <h1>Lune</h1>
+      </header>
+
+      <div class="ring-wrap">
+        <svg class="ring" viewBox="0 0 200 200" aria-hidden="true">
+          <circle class="ring-track" cx="100" cy="100" r="86" />
+          <circle class="ring-bar" id="ring-bar" cx="100" cy="100" r="86" pathLength="100" />
+        </svg>
+        <div class="ring-text">
+          <p class="ring-small" id="ring-top"></p>
+          <p class="ring-big" id="ring-big"></p>
+          <p class="ring-small" id="ring-bottom"></p>
+        </div>
+      </div>
+
+      <div class="actions">
+        <button class="btn primary" id="btn-period"></button>
+        <button class="link" id="btn-period-other">Une autre date ?</button>
+      </div>
+
+      <div class="cards" id="home-cards"></div>
+
+      <button class="card today-card" id="btn-today">
+        <div>
+          <p class="card-label">Aujourd'hui</p>
+          <p class="card-value" id="today-summary">Comment te sens-tu ?</p>
+        </div>
+        <span class="chev" aria-hidden="true">›</span>
+      </button>
+    </section>
+
+    <!-- CALENDRIER -->
+    <section class="view" id="view-calendar" data-view="calendar" hidden>
+      <header class="top row">
+        <button class="icon-btn" id="cal-prev" aria-label="Mois précédent">‹</button>
+        <h1 id="cal-title"></h1>
+        <button class="icon-btn" id="cal-next" aria-label="Mois suivant">›</button>
+      </header>
+      <div class="cal-head"><span>L</span><span>M</span><span>M</span><span>J</span><span>V</span><span>S</span><span>D</span></div>
+      <div class="cal-grid" id="cal-grid"></div>
+      <ul class="legend">
+        <li><i class="dot period"></i>Règles</li>
+        <li><i class="dot predicted"></i>Prévues</li>
+        <li><i class="dot fertile"></i>Fertile (est.)</li>
+        <li><i class="dot ovulation"></i>Ovulation (est.)</li>
+      </ul>
+      <p class="hint">Touche un jour pour noter tes règles, ton humeur ou tes douleurs.</p>
+    </section>
+
+    <!-- STATS -->
+    <section class="view" id="view-stats" data-view="stats" hidden>
+      <header class="top"><h1>Mon cycle</h1></header>
+      <div id="stats"></div>
+    </section>
+
+    <!-- RÉGLAGES -->
+    <section class="view" id="view-settings" data-view="settings" hidden>
+      <header class="top"><h1>Réglages</h1></header>
+
+      <h2 class="group-title">Rappels</h2>
+      <div class="group">
+        <label class="field">
+          <span>Prévenir avant les règles</span>
+          <select id="set-remindBefore">
+            <option value="0">Le jour même</option>
+            <option value="1">1 jour avant</option>
+            <option value="2">2 jours avant</option>
+            <option value="3">3 jours avant</option>
+            <option value="5">5 jours avant</option>
+          </select>
+        </label>
+        <label class="field">
+          <span>Prévenir pour la fin</span>
+          <select id="set-remindEndBefore">
+            <option value="0">Le jour prévu</option>
+            <option value="1">La veille</option>
+          </select>
+        </label>
+        <label class="field">
+          <span>Heure du rappel</span>
+          <select id="set-reminderHour"></select>
+        </label>
+      </div>
+      <button class="btn primary block" id="btn-ics">Ajouter les rappels au Calendrier</button>
+      <p class="hint">Crée les dates prévues des 6 prochains cycles dans l'app Calendrier de l'iPhone, avec une alerte. Refais-le de temps en temps : les prévisions s'affinent avec tes données.</p>
+      <button class="btn block" id="btn-notif">Activer les notifications de l'app</button>
+      <p class="hint" id="notif-hint">Alerte aussi quand tu ouvres l'app à l'approche ou à la fin de tes règles.</p>
+
+      <h2 class="group-title">Mon cycle habituel</h2>
+      <div class="group">
+        <label class="field">
+          <span>Durée du cycle</span>
+          <span class="stepper"><input type="number" id="set-cycleLength" min="15" max="60" inputmode="numeric"> j</span>
+        </label>
+        <label class="field">
+          <span>Durée des règles</span>
+          <span class="stepper"><input type="number" id="set-periodLength" min="1" max="15" inputmode="numeric"> j</span>
+        </label>
+      </div>
+      <p class="hint">Utilisé tant que l'app n'a pas assez d'historique. Ensuite, la moyenne de tes 6 derniers cycles prend le relais.</p>
+
+      <h2 class="group-title">Mes données</h2>
+      <div class="group">
+        <button class="row-btn" id="btn-export">Exporter une sauvegarde</button>
+        <label class="row-btn" for="file-import">Importer une sauvegarde<input type="file" id="file-import" accept="application/json,.json" hidden></label>
+        <button class="row-btn danger" id="btn-reset">Tout effacer</button>
+      </div>
+      <p class="hint">Tes données restent uniquement sur ce téléphone : aucun compte, aucun serveur. Pense à exporter une sauvegarde de temps en temps.</p>
+      <p class="hint small">Les prévisions sont des estimations et ne remplacent ni un avis médical ni une contraception.</p>
+    </section>
+  </main>
+
+  <nav class="tabbar" aria-label="Navigation">
+    <button data-tab="home" class="active"><svg viewBox="0 0 24 24"><path d="M12 3a9 9 0 1 0 9 9 7 7 0 0 1-9-9Z"/></svg><span>Aujourd'hui</span></button>
+    <button data-tab="calendar"><svg viewBox="0 0 24 24"><rect x="3.5" y="5" width="17" height="15.5" rx="3"/><path d="M3.5 10h17M8 3v4M16 3v4"/></svg><span>Calendrier</span></button>
+    <button data-tab="stats"><svg viewBox="0 0 24 24"><path d="M5 20V11M12 20V5M19 20v-6"/></svg><span>Mon cycle</span></button>
+    <button data-tab="settings"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M12 2.5v3M12 18.5v3M2.5 12h3M18.5 12h3M5.3 5.3l2.1 2.1M16.6 16.6l2.1 2.1M5.3 18.7l2.1-2.1M16.6 7.4l2.1-2.1"/></svg><span>Réglages</span></button>
+  </nav>
+
+  <!-- FICHE DU JOUR -->
+  <div class="sheet-backdrop" id="sheet" hidden>
+    <div class="sheet" role="dialog" aria-modal="true" aria-labelledby="sheet-title">
+      <div class="sheet-handle"></div>
+      <header class="sheet-head">
+        <h2 id="sheet-title"></h2>
+        <button class="link" id="sheet-close">OK</button>
+      </header>
+      <div class="sheet-body">
+        <div class="period-actions" id="sheet-period"></div>
+
+        <h3>Saignement</h3>
+        <div class="seg" id="sheet-flow"></div>
+
+        <h3>Douleur <span class="muted" id="pain-value"></span></h3>
+        <input type="range" min="0" max="10" step="1" id="sheet-pain" class="range">
+        <div class="chips" id="sheet-painTypes"></div>
+
+        <h3>Humeur</h3>
+        <div class="chips" id="sheet-moods"></div>
+
+        <h3>Symptômes</h3>
+        <div class="chips" id="sheet-symptoms"></div>
+
+        <h3>Note</h3>
+        <textarea id="sheet-note" rows="3" placeholder="Quelque chose à retenir ?"></textarea>
+      </div>
+    </div>
+  </div>
+
+  <!-- CHOIX DE DATE -->
+  <div class="sheet-backdrop" id="datepick" hidden>
+    <div class="sheet small" role="dialog" aria-modal="true" aria-labelledby="datepick-title">
+      <div class="sheet-handle"></div>
+      <h2 id="datepick-title"></h2>
+      <input type="date" id="datepick-input" class="date-input">
+      <div class="row-actions">
+        <button class="btn" id="datepick-cancel">Annuler</button>
+        <button class="btn primary" id="datepick-ok">Valider</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+  <script type="module" src="js/app.js"></script>
+</body>
+</html>

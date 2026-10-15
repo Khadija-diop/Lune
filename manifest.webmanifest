@@ -1,0 +1,17 @@
+{
+  "name": "Lune – suivi de cycle",
+  "short_name": "Lune",
+  "description": "Suivi de cycle menstruel privé : règles, humeurs, douleurs et rappels.",
+  "lang": "fr",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#FBF5F2",
+  "theme_color": "#B8325A",
+  "icons": [
+    { "src": "icons/icon-192.png", "sizes": "192x192", "type": "image/png" },
+    { "src": "icons/icon-512.png", "sizes": "512x512", "type": "image/png" },
+    { "src": "icons/icon-512-maskable.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
+  ]
+}
